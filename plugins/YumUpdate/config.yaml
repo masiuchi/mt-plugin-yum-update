@@ -1,4 +1,11 @@
 name: YumUpdate
+version: 0.01
+
+description: <__trans phrase="Update installed yum packages everyday.">
+plugin_link: https://github.com/masiuchi/mt-plugin-yum-update
+
+author_name: Masahiro Iuchi
+author_link: https://github.com/masiuchi
 
 tasks:
   YumUpdate:
