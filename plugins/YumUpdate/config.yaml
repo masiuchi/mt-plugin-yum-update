@@ -1,0 +1,8 @@
+name: YumUpdate
+
+tasks:
+  YumUpdate:
+    label: Update yum packages
+    frequency: "sub { $MT::DebugMode ? 1 : 86400 }"
+    code: $YumUpdate::MT::Plugin::YumUpdate::code
+
