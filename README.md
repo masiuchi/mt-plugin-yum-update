@@ -1,4 +1,5 @@
 # mt-plugin-yum-update
+Update installed yum packages everyday.
 
 ## Installation (AWS)
 * Copy plugin files.
