@@ -51,8 +51,8 @@ sub _mail_header {
 }
 
 sub _superuser {
-    my $user = MT->model('author')
-        ->load( undef, { sort => 'id', direction => 'descend', limit => 1 } );
+    my $user
+        = MT->model('author')->load( undef, { sort => 'id', limit => 1 } );
     $user;
 }
 
