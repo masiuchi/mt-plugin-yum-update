@@ -2,7 +2,6 @@ package MT::Plugin::YumUpdate::Mail;
 use strict;
 use warnings;
 
-use MT;
 use MT::Mail;
 
 use constant SUBJECT => 'yum update log';
