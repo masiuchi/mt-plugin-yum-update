@@ -16,7 +16,7 @@ sub run {
 
 sub is_updated {
     my $self = shift;
-    $self->log =~ /No Packages marked for update/m ? 0 : 1;
+    $self->log =~ /No Packages marked for Update/im ? 0 : 1;
 }
 
 1;
