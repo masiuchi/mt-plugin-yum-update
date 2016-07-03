@@ -3,27 +3,21 @@ use strict;
 use warnings;
 
 use MT;
-use MT::Mail;
+use MT::Author;
+
+use MT::Plugin::YumUpdate::Command;
+use MT::Plugin::YumUpdate::Mail;
 
 sub code {
-    my $log = _yum_update();
-    if ( _packages_were_updated($log) ) {
-        _write_log($log);
-        if ( my $user = &_superuser ) {
-            _send_mail( $user, $log );
+    my $yum_update = MT::Plugin::YumUpdate::Command->new;
+    $yum_update->run;
+    if ( $yum_update->is_updated ) {
+        _write_log( $yum_update->log );
+        if ( my $su = &_exist_superuser ) {
+            MT::Plugin::YumUpdate::Mail->send( $su->email, $yum_update->log );
         }
     }
     1;
-}
-
-sub _yum_update {
-    my @logs = `sudo yum -y update 2>&1`;
-    join "\n", @logs;
-}
-
-sub _packages_were_updated {
-    my $log = shift;
-    $log =~ /No Packages marked for update/m ? 0 : 1;
 }
 
 sub _write_log {
@@ -36,24 +30,12 @@ sub _write_log {
     );
 }
 
-sub _send_mail {
-    my ( $user, $log ) = @_;
-    my $header = _mail_header($user);
-    MT::Mail->send( $header, $log );
-}
-
-sub _mail_header {
-    my $user = shift;
-    +{  From    => $user->email,
-        To      => $user->email,
-        Subject => 'yum update log',
-    };
-}
-
-sub _superuser {
-    my $user
-        = MT->model('author')->load( undef, { sort => 'id', limit => 1 } );
-    $user;
+sub _exist_superuser {
+    my $iter = MT::Author->load_iter( undef, { sort => 'id' } );
+    while ( my $user = $iter->() ) {
+        return $user if $user->is_superuser;
+    }
+    undef;
 }
 
 1;
