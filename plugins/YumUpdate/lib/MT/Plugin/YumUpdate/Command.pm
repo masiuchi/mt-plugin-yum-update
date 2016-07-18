@@ -11,7 +11,7 @@ sub run {
     my $self    = shift;
     my $command = COMMAND;
     my @logs    = `$command`;
-    $self->log( join "\n", @logs );
+    $self->log( join '', @logs );
 }
 
 sub is_updated {
